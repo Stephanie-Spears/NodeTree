@@ -1,13 +1,9 @@
-const https = require('https');
-const username = "stephaniespears1";
+const profile = require('./profile.js');
+const colors = require('colors');
+const users = process.argv.slice(2);
+users.forEach(profile.get);
+console.log(colors.enable)
 
-function printMessage(username, badgeCount, points){
-  const message = `${username} has ${badgeCount} total badge(s) and ${points} points in JavaScript`;
-  console.log(message);
-}
-
-const request = https.get(`https://teamtreehouse.com/${username}.json`, response => {
-  //some comments
-  console.dir(response);
-  console.log(response.statusCode);
-});
+//process is the global object used to access the current version of node and arguments passed in the command line
+//slice skips the first two elements, which are the node binary and the app.js file.
+// Allows variable argument with argv
