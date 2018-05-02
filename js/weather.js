@@ -1,15 +1,18 @@
+const colors = require('colors');
 const http = require('http');
 const https = require('https');
 const api = require('./api.json');
 
 
 function printWeather(weather){
+	weather.location.city = colors.blue(weather.location.city);
+	weather.current_observation.temp_f = colors.magenta(weather.current_observation.temp_f);
 	const message = `Current temperature in ${weather.location.city} is ${weather.current_observation.temp_f}F`;
 	console.log(message);
 }
 
 function printError(error){
-	console.error(error.message);
+	console.error(colors.red(error.message));
 }
 
 function get(query){
