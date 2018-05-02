@@ -1,58 +1,36 @@
-// const colors = require('colors');
-//
-// colors.setTheme({
-//   sillyColor: 'rainbow',
-//   inputColor: 'grey',
-//   verboseColor: 'cyan',
-//   promptColor: 'grey',
-//   infoColor: 'green',
-//   dataColor: 'grey',
-//   helpColor: 'cyan',
-//   warnColor: 'yellow',
-//   debugColor: 'blue',
-//   errorColor: 'red'
-// });
-
-// outputs red text
-// console.log("this is an error".errorColor);
-
-// outputs yellow text
-// console.log("this is a warning".warnColor);
-
-
-
-
+const colors = require('colors');
 const https = require('https');
+const http = require('http');//module for status codes
 
-//module for status codes
-const http = require('http');
 
-//print error messages
 function printError(error){
-  console.error(error.message);
+  console.error(colors.red(error.message));
 }
 
 function printMessage(username, badgeCount, points){
-  const message = `${username} has ${badgeCount} total badge(s) and ${points} points in JavaScript`;
+  username = colors.magenta(username);
+  badgeCount = colors.yellow(badgeCount);
+  points = colors.cyan(points);
+  const message = `\n${username} has ${badgeCount} total badge(s) and ${points} points in JavaScript\n`;
   console.log(message);
+
+  console.log(colors.rainbow('OMG Rainbow!'));
 }
 
 
 function get(username) {
-  //connect to the API URL
-  try {
+  try {  //connect to the API URL
     const request = https.get(`https://teamtreehouse.com/${username}.json`, response => {
 
       if(response.statusCode === 200){
         let body = "";
 
-        // read the data
-        response.on('data', data => {
+        response.on('data', data => {// read the data
+
           body += data.toString();
         });
 
-        //parse the data when finished transferring
-        response.on('end', () => {
+        response.on('end', () => {// parse data when finished transferring
           try {
             const profile = JSON.parse(body);
             printMessage(username, profile.badges.length, profile.points.JavaScript);
@@ -73,5 +51,5 @@ function get(username) {
     printError(error);
   }
 }
-//name of the api I want to be accessible
-module.exports.get = get;
+
+module.exports.get = get;//name of the api I want to be accessible
