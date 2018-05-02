@@ -1,6 +1,6 @@
-const profile = require('./profile.js');
-const users = process.argv.slice(2);
-users.forEach(profile.get);
+// const profile = require('./profile.js');
+// const users = process.argv.slice(2);
+// users.forEach(profile.get);
 
 const weather = require('./weather');
 const query = process.argv.slice(2).join("_").replace('_', ' ');
