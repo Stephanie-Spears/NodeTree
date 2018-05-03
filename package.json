@@ -1,0 +1,23 @@
+{
+  "name": "nodetree",
+  "version": "1.0.0",
+  "description": "#### _Node Tree, May 2nd, 2018_ #### By ***Stephanie Spears***",
+  "main": "app.js",
+  "dependencies": {
+    "colors": "^1.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stephanie-Spears/NodeTree.git"
+  },
+  "author": "Stephanie Spears",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stephanie-Spears/NodeTree/issues"
+  },
+  "homepage": "https://github.com/Stephanie-Spears/NodeTree#readme"
+}
