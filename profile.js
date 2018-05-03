@@ -1,51 +1,55 @@
-var EventEmitter = require("events").EventEmitter;
-var https = require("https");
-var http = require("http");
-var util = require("util");
+const colors = require('colors');
+const https = require('https');
+const http = require('http');//module for status codes
 
-/**
- * An EventEmitter to get a Treehouse students profile.
- * @param username
- * @constructor
- */
-function Profile(username) {
 
-	EventEmitter.call(this);
-
-	var profileEmitter = this;
-
-	//Connect to the API URL (https://teamtreehouse.com/username.json)
-	var request = https.get("https://teamtreehouse.com/" + username + ".json", function(response) {
-		var body = "";
-
-		if (response.statusCode !== 200) {
-			request.abort();
-			//Status Code Error
-			profileEmitter.emit("error", new Error("There was an error getting the profile for " + username + ". (" + http.STATUS_CODES[response.statusCode] + ")"));
-		}
-
-		//Read the data
-		response.on('data', function (chunk) {
-			body += chunk;
-			profileEmitter.emit("data", chunk);
-		});
-
-		response.on('end', function () {
-			if(response.statusCode === 200) {
-				try {
-					//Parse the data
-					var profile = JSON.parse(body);
-					profileEmitter.emit("end", profile);
-				} catch (error) {
-					profileEmitter.emit("error", error);
-				}
-			}
-		}).on("error", function(error){
-			profileEmitter.emit("error", error);
-		});
-	});
+function printError(error){
+  console.error(colors.red(error.message));
 }
 
-util.inherits( Profile, EventEmitter );
+function printMessage(username, badgeCount, points){
+  username = colors.magenta(username);
+  badgeCount = colors.yellow(badgeCount);
+  points = colors.cyan(points);
+  const message = `\n${username} has ${badgeCount} total badge(s) and ${points} points in JavaScript\n`;
+  console.log(message);
 
-module.exports = Profile;
+  console.log(colors.rainbow('OMG Rainbow!'));
+}
+
+
+function get(username) {
+  try {  //connect to the API URL
+    const request = https.get(`https://teamtreehouse.com/${username}.json`, response => {
+
+      if(response.statusCode === 200){
+        let body = "";
+
+        response.on('data', data => {// read the data
+
+          body += data.toString();
+        });
+
+        response.on('end', () => {// parse data when finished transferring
+          try {
+            const profile = JSON.parse(body);
+            printMessage(username, profile.badges.length, profile.points.JavaScript);
+          } catch (error) {
+            printError(error);
+          }
+        });
+      }
+      else{
+        const message = `There was an error getting the profile for ${username} (${http.STATUS_CODES[response.statusCode]})`;
+        const statusCodeError = new Error(message);
+        printError(statusCodeError);
+      }
+    });
+
+    request.on('error', printError);
+  } catch(error){
+    printError(error);
+  }
+}
+
+module.exports.get = get;//name of the api I want to be accessible
